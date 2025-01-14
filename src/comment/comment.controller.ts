@@ -1,4 +1,31 @@
-import { Controller } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Delete,
+  Param,
+  Body,
+  Query,
+} from '@nestjs/common';
+import { CreateCommentDto } from './dto/create-comment.dto';
+import { CommentService } from './comment.service';
 
 @Controller('comments')
-export class CommentController {}
+export class CommentController {
+  constructor(private readonly commentService: CommentService) {}
+
+  @Get()
+  async getCommentsForPost(@Query('postId') postId: number) {
+    return this.commentService.findAllByPost(postId);
+  }
+
+  @Post()
+  async createComment(@Body() createCommentDto: CreateCommentDto) {
+    return this.commentService.create(createCommentDto);
+  }
+
+  @Delete(':id')
+  async deleteComment(@Param('id') id: number) {
+    return this.commentService.delete(id);
+  }
+}
