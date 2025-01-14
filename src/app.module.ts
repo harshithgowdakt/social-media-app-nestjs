@@ -1,35 +1,38 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AppService } from './app.service';
 import { UsersModule } from './user/user.module';
-import { LikeController } from './like/like.controller';
-import { CommentController } from './comment/comment.controller';
-import { PostController } from './post/post.controller';
-import { PostController } from './post/post.controller';
-import { CommentController } from './comment/comment.controller';
-import { PostService } from './post/post.service';
-import { CommentService } from './comment/comment.service';
-import { LikeService } from './like/like.service';
-import { FollowerController } from './follower/follower.controller';
-import { FollowerService } from './follower/follower.service';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { PostModule } from './post/post.module';
+import { LikeModule } from './like/like.module';
+import { CommentModule } from './comment/comment.module';
+import { FollowerModule } from './follower/follower.module';
 
 @Module({
-  imports: [UsersModule],
-  controllers: [
-    AppController,
-    LikeController,
-    CommentController,
-    PostController,
-    PostController,
-    CommentController,
-    FollowerController,
+  imports: [
+    ConfigModule.forRoot(), // Loads environment variables
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => ({
+        type: 'postgres',
+        host: configService.get('DB_HOST'),
+        port: +configService.get<number>('DB_PORT'),
+        username: configService.get('DB_USERNAME'),
+        password: configService.get('DB_PASSWORD'),
+        database: configService.get('DB_DATABASE'),
+        entities: [__dirname + '/../**/*.entity{.ts,.js}'],
+        synchronize: true,
+      }),
+      inject: [ConfigService],
+    }),
+    UsersModule,
+    PostModule,
+    LikeModule,
+    CommentModule,
+    FollowerModule,
   ],
-  providers: [
-    AppService,
-    PostService,
-    CommentService,
-    LikeService,
-    FollowerService,
-  ],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}
