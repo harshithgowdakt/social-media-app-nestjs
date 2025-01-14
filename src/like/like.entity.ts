@@ -4,8 +4,8 @@ import {
   ManyToOne,
   CreateDateColumn,
 } from 'typeorm';
-import { User } from '../users/users.entity';
-import { Post } from '../posts/posts.entity';
+import { User } from '../user/user.entity';
+import { Post } from '../post/post.entity';
 
 @Entity('likes')
 export class Like {

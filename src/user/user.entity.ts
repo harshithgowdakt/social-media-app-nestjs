@@ -6,9 +6,10 @@ import {
   UpdateDateColumn,
   OneToMany,
 } from 'typeorm';
-import { Post } from '../posts/posts.entity';
-import { Comment } from '../comments/comments.entity';
-import { Like } from '../likes/likes.entity';
+import { Post } from '../post/post.entity';
+import { Comment } from '../comment/comment.entity';
+import { Like } from '../like/like.entity';
+import { Follower } from '../follower/follower.entity';
 
 @Entity('users')
 export class User {
@@ -44,4 +45,10 @@ export class User {
 
   @OneToMany(() => Like, (like) => like.user)
   likes: Like[];
+
+  @OneToMany(() => Follower, (follower) => follower.user)
+  followers: Follower[];
+
+  @OneToMany(() => Follower, (follower) => follower.follower)
+  following: Follower[];
 }
