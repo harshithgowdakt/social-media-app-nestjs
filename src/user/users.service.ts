@@ -18,17 +18,26 @@ export class UserService {
     const [users, total] = await this.userRepository.findAndCount({
       skip: (page - 1) * limit,
       take: limit,
-      relations: ['followers', 'following', 'posts', 'comments', 'likes'],
     });
-    return { users, total, page, limit };
+    let mappedUser = users.map((u) => {
+      const { password, createdAt, updatedAt, ...result } = u;
+      return result;
+    });
+    return { mappedUser, total, page, limit };
   }
 
   // Get a single user by ID
   async findOne(id: number) {
-    return this.userRepository.findOne({
+    const user = await this.userRepository.findOne({
       where: { userId: id },
-      relations: ['followers', 'following', 'posts', 'comments', 'likes'],
     });
+
+    if (user) {
+      const { password, createdAt, updatedAt, ...result } = user;
+      return result;
+    }
+
+    return null;
   }
 
   // Create a new user
@@ -60,9 +69,17 @@ export class UserService {
 
   // Search users by username or email
   async search(query: string) {
-    return this.userRepository.find({
+    const users = await this.userRepository.find({
       where: [{ username: Like(`%${query}%`) }, { email: Like(`%${query}%`) }],
-      relations: ['followers', 'following', 'posts'],
     });
+
+    if (users) {
+      return users.map((u) => {
+        const { password, createdAt, updatedAt, ...result } = u;
+        return result;
+      });
+    }
+
+    return null;
   }
 }

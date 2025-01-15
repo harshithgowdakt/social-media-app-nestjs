@@ -25,6 +25,12 @@ export class UserController {
     return this.userService.findAll({ page, limit });
   }
 
+  // Search for users by username or email
+  @Get('search')
+  async searchUsers(@Query('query') query: string) {
+    return this.userService.search(query);
+  }
+
   // Get a single user by ID
   @Get(':id')
   async getUserById(@Param('id') id: number) {
@@ -39,7 +45,10 @@ export class UserController {
 
   // Update an existing user
   @Put(':id')
-  async updateUser(@Param('id') id: number, @Body() updateUserDto: UpdateUserDto) {
+  async updateUser(
+    @Param('id') id: number,
+    @Body() updateUserDto: UpdateUserDto,
+  ) {
     return this.userService.update(id, updateUserDto);
   }
 
@@ -47,11 +56,5 @@ export class UserController {
   @Delete(':id')
   async deleteUser(@Param('id') id: number) {
     return this.userService.delete(id);
-  }
-
-  // Search for users by username or email
-  @Get('search')
-  async searchUsers(@Query('query') query: string) {
-    return this.userService.search(query);
   }
 }
