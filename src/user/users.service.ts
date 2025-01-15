@@ -29,7 +29,7 @@ export class UserService {
   // Get a single user by ID
   async findOne(id: number) {
     const user = await this.userRepository.findOne({
-      where: { userId: id },
+      where: { id },
     });
 
     if (user) {

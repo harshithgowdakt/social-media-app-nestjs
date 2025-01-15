@@ -1,35 +1,55 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Post } from './post.entity';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
+import { User } from 'src/user/user.entity';
 
 @Injectable()
 export class PostService {
   constructor(
     @InjectRepository(Post)
     private readonly postRepository: Repository<Post>,
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
   ) {}
 
   async findAll({ page, limit }: { page: number; limit: number }) {
     return this.postRepository.find({
       take: limit,
       skip: (page - 1) * limit,
-      relations: ['user', 'comments', 'likes'],
+      relations: ['comments', 'likes'],
     });
   }
 
   async findOne(postId: number) {
     return this.postRepository.findOne({
-      where: { postId },
-      relations: ['user', 'comments', 'likes'],
+      where: { id: postId },
+      relations: ['comments', 'likes'],
     });
   }
 
   async create(createPostDto: CreatePostDto) {
-    const post = this.postRepository.create(createPostDto);
-    return this.postRepository.save(post);
+    const user = await this.userRepository.findOne({
+      where: { id: createPostDto.userId },
+      select: ['id'], // Only select what you need
+    });
+
+    if (!user) {
+      throw new NotFoundException(
+        `User with ID ${createPostDto.userId} not found`,
+      );
+    }
+    // Create post instance
+    const post = this.postRepository.create({
+      content: createPostDto.content,
+      mediaUrl: createPostDto.mediaUrl,
+      user: { id: user.id }, // Just set the ID if you don't need the full user object
+    });
+
+    // Save and return the post with relations if needed
+    return await this.postRepository.save(post);
   }
 
   async update(postId: number, updatePostDto: UpdatePostDto) {

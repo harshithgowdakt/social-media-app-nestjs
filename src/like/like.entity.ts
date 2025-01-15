@@ -10,7 +10,7 @@ import { Post } from '../post/post.entity';
 @Entity('likes')
 export class Like {
   @PrimaryGeneratedColumn()
-  likeId: number;
+  id: number;
 
   @CreateDateColumn()
   createdAt: Date;

@@ -14,7 +14,7 @@ import { Like } from '../like/like.entity';
 @Entity('posts')
 export class Post {
   @PrimaryGeneratedColumn()
-  postId: number;
+  id: number;
 
   @Column('text')
   content: string;

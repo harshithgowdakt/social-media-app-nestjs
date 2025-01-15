@@ -9,6 +9,7 @@ import { LikeModule } from './like/like.module';
 import { CommentModule } from './comment/comment.module';
 import { FollowerModule } from './follower/follower.module';
 import { join } from 'path';
+import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { join } from 'path';
         database: configService.get('POSTGRES_DB'),
         entities: [join(__dirname, '**', '*.entity.{ts,js}')],
         synchronize: true,
+        namingStrategy: new SnakeNamingStrategy(),
       }),
       inject: [ConfigService],
     }),

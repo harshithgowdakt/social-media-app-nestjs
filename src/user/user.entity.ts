@@ -14,7 +14,7 @@ import { Follower } from '../follower/follower.entity';
 @Entity('users')
 export class User {
   @PrimaryGeneratedColumn()
-  userId: number;
+  id: number;
 
   @Column({ unique: true })
   username: string;

@@ -12,8 +12,8 @@ export class FollowerService {
 
   async follow(userId: number, followerId: number) {
     const follow = this.followerRepository.create({
-      user: { userId },
-      follower: { userId: followerId },
+      user: { id: userId },
+      follower: { id: followerId },
     });
     return this.followerRepository.save(follow);
   }

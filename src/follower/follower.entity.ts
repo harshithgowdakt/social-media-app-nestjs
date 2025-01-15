@@ -9,7 +9,7 @@ import { User } from '../user/user.entity';
 @Entity('followers')
 export class Follower {
   @PrimaryGeneratedColumn()
-  followerId: number;
+  id: number;
 
   @CreateDateColumn()
   createdAt: Date;

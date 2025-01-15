@@ -13,7 +13,7 @@ export class CommentService {
 
   async findAllByPost(postId: number) {
     return this.commentRepository.find({
-      where: { post: { postId } },
+      where: { post: { id:postId } },
       relations: ['user', 'post'],
     });
   }

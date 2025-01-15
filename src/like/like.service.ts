@@ -12,8 +12,8 @@ export class LikeService {
 
   async like(postId: number, userId: number) {
     const like = this.likeRepository.create({
-      post: { postId },
-      user: { userId },
+      post: { id: postId },
+      user: { id: userId },
     });
     return this.likeRepository.save(like);
   }
