@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+
 import { Comment } from './comment.entity';
 import { CreateCommentDto } from './dto/create-comment.dto';
 
@@ -13,7 +14,7 @@ export class CommentService {
 
   async findAllByPost(postId: number) {
     return this.commentRepository.find({
-      where: { post: { id:postId } },
+      where: { post: { id: postId } },
       relations: ['user', 'post'],
     });
   }

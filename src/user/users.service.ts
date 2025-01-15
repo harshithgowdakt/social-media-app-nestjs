@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import * as bcrypt from 'bcrypt';
 import { InjectRepository } from '@nestjs/typeorm';
+import * as bcrypt from 'bcrypt';
 import { Repository, Like } from 'typeorm';
-import { User } from './user.entity';
+
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { User } from './user.entity';
 
 @Injectable()
 export class UserService {
@@ -19,7 +20,7 @@ export class UserService {
       skip: (page - 1) * limit,
       take: limit,
     });
-    let mappedUser = users.map((u) => {
+    const mappedUser = users.map((u) => {
       const { password, createdAt, updatedAt, ...result } = u;
       return result;
     });

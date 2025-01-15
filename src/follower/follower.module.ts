@@ -1,8 +1,9 @@
 import { Module } from '@nestjs/common';
-import { FollowerController } from './follower.controller';
-import { FollowerService } from './follower.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
+
+import { FollowerController } from './follower.controller';
 import { Follower } from './follower.entity';
+import { FollowerService } from './follower.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Follower])],

@@ -7,9 +7,10 @@ import {
   UpdateDateColumn,
   OneToMany,
 } from 'typeorm';
-import { User } from '../user/user.entity';
+
 import { Comment } from '../comment/comment.entity';
 import { Like } from '../like/like.entity';
+import { User } from '../user/user.entity';
 
 @Entity('posts')
 export class Post {

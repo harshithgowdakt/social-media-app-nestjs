@@ -4,6 +4,7 @@ import {
   ManyToOne,
   CreateDateColumn,
 } from 'typeorm';
+
 import { User } from '../user/user.entity';
 
 @Entity('followers')
